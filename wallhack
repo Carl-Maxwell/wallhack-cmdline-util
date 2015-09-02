@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'byebug'
 
 class WallHack
@@ -39,6 +41,15 @@ class WallHack
     # do the things
   end
 
+  def c_routes
+    Route.instance.routes do |route|
+      route.http_method.upcase + " \t\t" +
+      route.pattern + " "
+      route.action_name + " \t"
+      route.controller_class
+    end
+  end
+
   def add_bin_commands
     Dir.glob(project_folder + '/bin/*.rb').each do |bin|
       without_extension = bin.split("/")[-1][0..-4]
@@ -59,8 +70,8 @@ class WallHack
   end
 end
 
-if !ARGV.length
-  puts "Terrible wrongness!\n wallhack needs instructions!"
+if ARGV.empty?
+  puts "Terrible wrongness!\nwallhack needs instructions!"
 else
   p WallHack.instance.send(("c_" + ARGV.shift).to_sym)
 end
